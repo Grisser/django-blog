@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %} {% endblock %}</title>
+        <link rel="stylesheet" href="{% static '/css/uikit.min.css' %}">
+        <link rel="stylesheet" href="{% static '/css/uikit-rtl.min.css' %}">
+        <script src="{% static '/js/uikit.min.js' %}"></script>
+        <script src="{% static '/js/uikit-icons.min.js' %}"></script>
+    </head>
+    <body>
+        <div class="uk-container">
+            {% block content %} {% endblock %}
+        </div>
+    </body>
+</html>

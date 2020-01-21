@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %} DjBlog - Авторизация {% endblock %}
+
+{% block content %}
+    <div class="uk-card uk-card-default uk-card-hover uk-align-center uk-width-1-3 uk-margin-xlarge-top">
+        <div class="uk-card-body">
+            <h1 class="uk-card-title uk-text-center">Авторизация</h1>
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                <div class="uk-margin">
+                    <div class="uk-inline uk-width-1-1">
+                        <span class="uk-form-icon" uk-icon="icon: user"></span>
+                        <input class="uk-input" type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
+                    </div>
+                </div>
+                <div class="uk-margin">
+                    <div class="uk-inline uk-width-1-1">
+                        <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                        <input class="uk-input" type="password" name="password" autocomplete="current-password" required="" id="id_password">
+                    </div>
+                </div>
+                <input type="submit" value="Войти" class="uk-button uk-button-primary uk-align-center">
+            </form>
+        </div>
+    </div>
+{% endblock %}
