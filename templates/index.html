@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'basenavbar.html' %}
 
 {% block title %} DjBlog {% endblock %}
 
@@ -7,9 +7,7 @@
     {% if request.user.is_authenticated %}
         <h1>Hi, {{ request.user.username }}!</h1>
     {% else %}
-        <script>
-            window.location = '/accounts/login/'
-        </script>
+
     {% endif %}
 
 {% endblock %}

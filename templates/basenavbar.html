@@ -1,25 +1,41 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <title>{% block title %} {% endblock %}</title>
+        <link rel="stylesheet" href="{% static '/css/uikit-rtl.min.css' %}">
+        <script src="{% static '/js/uikit.min.js' %}"></script>
+        <script src="{% static '/js/uikit-icons.min.js' %}"></script>
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <div class="container">
-                <a class="navbar-brand" href="/">Django Blog</a>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                        <a class="nav-item nav-link active" href="/">Главная <span class="sr-only">(current)</span></a>
-                        <a class="nav-item nav-link" href="#">Новый пост</a>
-                        <a class="nav-item nav-link" href="#">Pricing</a>
+        <div class="uk-section-primary uk-navbar-container uk-navbar-transparent">
+            <div class="uk-container uk-container-large">
+                <nav class="uk-navbar">
+                    <div class="uk-navbar-left uk-width-1-2">
+                        <div class="uk-navbar-item uk-logo">
+                            <a class="uk-text-bold" href="/">DjangoBlog</a>
+                        </div>
                     </div>
-                </div>
+                    <div class="uk-navbar-right ">
+                        {% if request.user.is_authenticated %}
+                            <p class="uk-margin">
+                                <div>
+                                    <button class="uk-button uk-button-default uk-button-large"><span uk-icon="plus"></span>&nbsp;&nbsp;Создать&nbsp;пост</button>
+                                    <a href="/accounts/logout/"><button class="uk-button uk-button-large uk-button-text uk-margin-left">Выход</button></a>
+                                </div>
+                            </p>
+                        {% else %}
+                            <a href="/accounts/login"><button class="uk-button uk-button-large uk-button-text">Вход</button></a>
+                        {% endif %}
+                    </div>
+                </nav>
             </div>
-        </nav>
-        <div class="container">
-            {% block content %} {% endblock %}
+        </div>
+        <div class="uk-section">
+            <div class="uk-container">
+                {% block content %} {% endblock %}
+            </div>
         </div>
     </body>
 </html>
