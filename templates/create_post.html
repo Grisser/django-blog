@@ -1,0 +1,21 @@
+{% extends 'basenavbar.html' %}
+
+{% block title %} DjBlog - Новый пост {% endblock %}
+
+{% block content %}
+
+    <h1 class="uk-heading-small uk-heading-divider">Новый пост</h1>
+    <form action="/create_post" method="post">
+        {% csrf_token %}
+        <div class="uk-margin">
+            <input class="uk-input uk-form-large" type="text" placeholder="Заголовок" name="title" autofocus required>
+        </div>
+        <div class="uk-margin">
+            <textarea class="uk-textarea uk-form-large" rows="5" placeholder="Текст статьи" name="text"></textarea>
+        </div>
+        <div class="uk-margin">
+            <input class="uk-button uk-button-primary uk-button-large" type="submit" value="Опубликовать">
+        </div>
+    </form>
+
+{% endblock %}
