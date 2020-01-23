@@ -1,13 +1,21 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth.models import User
 from proj.models import Post
 
 
 # Create your views here.
 
 def index_view(request):
-    context = {}
+
+    posts = Post.objects.all().order_by("-id")
+
+    for post in posts:
+        post.username = post.author.get_username()
+
+    context = {"posts": posts}
+
     return render(request, "index.html", context)
 
 
