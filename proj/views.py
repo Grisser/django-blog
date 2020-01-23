@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
-from proj.models import Post
+from proj.models import *
 
 
 def index_view(request):
@@ -21,8 +21,13 @@ def create_post_view(request):
 
     if request.user.is_authenticated:
         if request.method == "POST":
-            post = Post(title=request.POST.get("title"), text=request.POST.get("text"), author=request.user)
-            post.save()
+            title = request.POST.get("title")
+            text = request.POST.get("text")
+
+            if (title is not None) and (text is not None):
+                post = Post(title=request.POST.get("title"), text=request.POST.get("text"), author=request.user)
+                post.save()
+
             return redirect('/')
         else:
             context = {}
@@ -31,23 +36,44 @@ def create_post_view(request):
         return redirect('/')
 
 
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "POST"])
 def post_view(request):
 
-    post_id = request.GET.get("id")
+    if request.method == "GET":
 
-    if post_id is not None:
-        try:
-            post_id = int(post_id)
-            post = Post.objects.get(id=post_id)
-            post.username = post.author.get_username()
-            context = {"post": post}
+        post_id = request.GET.get("id")
 
-            return render(request, "post.html", context)
-        except ValueError:
-            return redirect("/")
-        except Post.DoesNotExist:
+        if post_id is not None:
+            try:
+                post_id = int(post_id)
+                post = Post.objects.get(id=post_id)
+                post.username = post.author.get_username()
+
+                comments = Comment.objects.all().filter(post_id=post_id)
+                context = {"post": post, "comments": comments}
+
+                return render(request, "post.html", context)
+            except ValueError:
+                return redirect("/")
+            except Post.DoesNotExist:
+                return redirect("/")
+        else:
             return redirect("/")
     else:
-        return redirect("/")
+        post_id = request.POST.get("post_id")
+        text = request.POST.get("text")
+
+        if post_id is not None and request.user.is_authenticated:
+            try:
+                post_id = int(post_id)
+                post = Post.objects.get(id=post_id)
+                comment = Comment(text=text, post=post, author=request.user)
+
+                comment.save()
+            except ValueError:
+                pass
+            except Post.DoesNotExist:
+                pass
+
+        return redirect("/post?id=" + str(post_id) + "#commentaries")
 

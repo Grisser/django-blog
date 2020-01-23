@@ -9,5 +9,20 @@
     <p class="uk-text-lead uk-margin-remove-top" style="white-space: pre-wrap;">
         {{ post.text }}
     </p>
+    <h1 id="commentaries" class="uk-heading-small uk-heading-line">Комментарии</h1>
+    {% if request.user.is_authenticated %}
+        <form action="/post" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="post_id" value="{{ post.id }}">
+            <input class="uk-input uk-form-large uk-width-2-3" type="text" name="text" placeholder="Добавьте ваш комментарий...">
+            <input class="uk-button uk-button-primary uk-button-large uk-width-1-4 uk-margin-left" type="submit" value="Отправить">
+        </form>
+    {% endif %}
+    {% for comment in comments %}
+        <div class="uk-card uk-card-default uk-card-body uk-margin-medium-top">
+            <span>Автор: {{ comment.author.username }}</span><br>
+            <span class="uk-text-lead">{{ comment.text }}</span>
+        </div>
+    {% endfor %}
 
 {% endblock %}
