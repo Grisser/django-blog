@@ -17,3 +17,23 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+
+class Comment(models.Model):
+
+    text = models.TextField(max_length=300)
+    comment_time = models.DateTimeField(default=timezone.now(), blank=True)
+    post = models.ForeignKey(to=Post, on_delete=models.CASCADE)
+    author = models.ForeignKey(to=User, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ["-comment_time"]
+
+    def __str__(self):
+        return self.text
+
+
+class Like(models.Model):
+
+    post = models.ForeignKey(to=Post, on_delete=models.CASCADE)
+    author = models.ForeignKey(to=User, on_delete=models.CASCADE)
+

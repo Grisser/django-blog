@@ -1,0 +1,13 @@
+{% extends 'basenavbar.html' %}
+
+{% block title %} DjBlog {% endblock %}
+
+{% block content %}
+
+    <h1 class="uk-heading-small uk-margin-remove-bottom">{{ post.title }}</h1>
+    <span>Автор: {{ post.username }}. Опубликовано: {{ post.publication_time }}</span>
+    <p class="uk-text-lead uk-margin-remove-top" style="white-space: pre-wrap;">
+        {{ post.text }}
+    </p>
+
+{% endblock %}
