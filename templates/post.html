@@ -1,15 +1,43 @@
 {% extends 'basenavbar.html' %}
+{% load static %}
 
 {% block title %} DjBlog {% endblock %}
+{% block style %}
+
+    <style>
+        #like {
+            cursor: pointer;
+            width: 2rem;
+            height: 2rem;
+            background-size: contain;
+        }
+        #like:hover {
+            background-image: url("{% static 'img/heart_hover.svg' %}") !important;
+        }
+        .like_set {
+            background-image: url("{% static 'img/heart_filled.svg' %}");
+        }
+        .like_unset {
+            background-image: url("{% static 'img/heart.svg' %}");
+        }
+    </style>
+
+{% endblock %}
 
 {% block content %}
 
     <h1 class="uk-heading-small uk-margin-remove-bottom">{{ post.title }}</h1>
     <span>Автор: {{ post.username }}. Опубликовано: {{ post.publication_time }}</span>
-    <p class="uk-text-lead uk-margin-remove-top" style="white-space: pre-wrap;">
+    <p class="uk-text-lead uk-margin-remove-top uk-margin-small-bottom" style="white-space: pre-wrap;">
         {{ post.text }}
     </p>
-    <h1 id="commentaries" class="uk-heading-small uk-heading-line">Комментарии</h1>
+    <div id="likes" class="uk-flex uk-flex-middle">
+        <a href="/like?post={{ post.id }}">
+            <div id="like" class="{% if liked %} like_set {% else %} like_unset {% endif %}"></div>
+        </a>
+        <span class="uk-margin-left uk-text-lead uk-text-lighter">Понравилось {{ likes }} {{ likes_text }}</span>
+    </div>
+    <h1 id="commentaries" class="uk-heading-small uk-heading-line uk-margin-medium-top">Комментарии</h1>
     {% if request.user.is_authenticated %}
         <form action="/post" method="post">
             {% csrf_token %}

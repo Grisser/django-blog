@@ -8,6 +8,7 @@
         <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}">
         <script src="{% static '/js/uikit.min.js' %}"></script>
         <script src="{% static '/js/uikit-icons.min.js' %}"></script>
+        {% block style %} {% endblock %}
     </head>
     <body>
         <div class="uk-section-primary uk-navbar-container uk-navbar-transparent" uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky;">

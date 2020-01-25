@@ -49,8 +49,25 @@ def post_view(request):
                 post = Post.objects.get(id=post_id)
                 post.username = post.author.get_username()
 
+                likes = Like.objects.all().filter(post_id=post_id)
+                likes_count = len(likes)
+
+                liked = False
+                likes_text = ""
+
+                if request.user.is_authenticated:
+                    for like in likes:
+                        if like.author_id == request.user.id:
+                            liked = True
+
+                if (likes_count == 1 or (likes_count > 20 and (likes_count % 10) == 1) or (likes_count % 100) != 11) and \
+                        (likes_count != 0):
+                    likes_text = "пользователю"
+                else:
+                    likes_text = "пользователям"
+
                 comments = Comment.objects.all().filter(post_id=post_id)
-                context = {"post": post, "comments": comments}
+                context = {"post": post, "comments": comments, "likes": likes_count, "likes_text": likes_text, "liked": liked}
 
                 return render(request, "post.html", context)
             except ValueError:
@@ -77,3 +94,27 @@ def post_view(request):
 
         return redirect("/post?id=" + str(post_id) + "#commentaries")
 
+@require_http_methods(["GET"])
+def like_view(request):
+
+    if request.user.is_authenticated:
+
+        try:
+            post_id = int(request.GET.get("post"))
+            post = Post.objects.get(id=post_id)
+            like = Like.objects.get(post=post, author=request.user)
+            like.delete()
+
+            return redirect("/post?id=" + str(post_id) + "#like")
+        except Like.DoesNotExist:
+            like = Like(post=post, author=request.user)
+            like.save()
+
+            return redirect("/post?id=" + str(post_id) + "#like")
+        except Post.DoesNotExist:
+            return redirect("/")
+        except ValueError:
+            return redirect("/")
+
+    else:
+        return redirect("/accounts/login")
