@@ -4,6 +4,7 @@
 
 .idea
 venv
+.vscode
 
 ### Django ###
 *.log
